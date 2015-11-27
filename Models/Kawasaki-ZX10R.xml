@@ -196,7 +196,7 @@
 	<name>TRANSPONDER</name>
     <path>Aircraft/Kawa-ZX10R/Models/Instruments/transponder/transponder.xml</path>
     <offsets>
-        <x-m> -0.68 </x-m>
+        <x-m> -0.68</x-m>
         <y-m> 0.08</y-m>
         <z-m> 0.90 </z-m>
       <roll-deg> -40 </roll-deg>
