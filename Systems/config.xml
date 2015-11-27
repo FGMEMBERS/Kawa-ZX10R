@@ -201,6 +201,29 @@
 	  
 	  <hrule/>
 	  
+  	  <group>
+  	    <layout>hbox</layout>
+  	    <slider>
+  	      <property>/controls/hang-off-speed</property>
+  	      <binding>
+			  <command>dialog-apply</command>
+		  </binding>
+  	      <min>10.0</min>
+		  <max>320.0</max>
+  	    </slider>
+  	    <text>
+  	      <property>/controls/hang-off-speed</property>
+  	      <label>0123456</label>
+  	      <format>%.1f</format>
+  	      <live>1</live>
+  	      <halign>right</halign>
+  	    </text>
+  	    <text>
+  	      <label>max. hang-off speed in mph</label>
+  	      <halign>right</halign>
+  	    </text>
+  	  </group>
+	  
       <group>
         <layout>hbox</layout>
         <button>

@@ -40,21 +40,16 @@ var gspeed = 0;
 
 var loop = func {
 
-	# shoulder view helper
-	var cv = getprop("/sim/current-view/view-number") or 0;
-	var apos = getprop("/devices/status/keyboard/event/key") or 0;
-	var press = getprop("/devices/status/keyboard/event/pressed") or 0;
-	var du = getprop("/controls/Kawa-ZX10R/driver-up") or 0;
-	#helper turn shoulder to look back
-	if(cv == 0 and !du){
-		if(apos == 49 and press){
-			setprop("/sim/current-view/heading-offset-deg", 160);
-			setprop("/controls/Kawa-ZX10R/driver-looks-back",1);
-		}else{
-			setprop("/sim/current-view/heading-offset-deg", 0);
-			setprop("/controls/Kawa-ZX10R/driver-looks-back",0);
-		}
-	}
+	var msec = getprop("/gear/gear/rollspeed-ms") or 0;
+	var kmh = msec*3600/1000;
+	var gefahrenem = getprop("/instrumentation/Kawa-ZX10R/distance-calculator/mzaehler") or 0;
+	var tagesm = getprop("/instrumentation/Kawa-ZX10R/distance-calculator/dmzaehler") or 0;
+	gefahrenem = gefahrenem + msec/8*1.16;  # 0.125 sec * 8 / 1.16 correction value for the wheel dimension
+	tagesm = tagesm + msec/8*1.16;
+	setprop("/instrumentation/Kawa-ZX10R/distance-calculator/mzaehler", gefahrenem);
+	setprop("/instrumentation/Kawa-ZX10R/distance-calculator/dmzaehler", tagesm);
+	
+	#help_win.write(sprintf("Geschwindigkeit in m/s: %.2f Gesamt m: %.1f", kmh, gefahrenem));
 	
 	var comp_m_f = getprop("/gear/gear[0]/compression-m") or 0;
 	var comp_m_r = getprop("/gear/gear[1]/compression-m") or 0;

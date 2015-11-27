@@ -4,6 +4,8 @@
 #		This file is licenced under the terms of the GNU General Public Licence V2 or later
 ###############################################################################################
 var config_dlg = gui.Dialog.new("/sim/gui/dialogs/config/dialog", getprop("/sim/aircraft-dir")~"/Systems/config.xml");
+var hangoffspeed = props.globals.initNode("/controls/hang-off-speed",80,"DOUBLE");
+var hangoffhdg = props.globals.initNode("/controls/hang-off-hdg",0,"DOUBLE");
 
 ################## Little Help Window on bottom of screen #################
 var help_win = screen.window.new( 0, 0, 1, 5 );
@@ -21,6 +23,8 @@ var f = props.globals.getNode("/controls/flight/fork");
 var forkcontrol = func{
     var r = getprop("/controls/flight/rudder") or 0;
 	var ms = getprop("/devices/status/mice/mouse/mode") or 0;
+	var bl = getprop("/controls/gear/brake-left") or 0;
+	var bs = getprop("/instrumentation/airspeed-indicator/indicated-speed-kt") or 0;
 	if (ms == 1) {
 		if(getprop("/devices/status/mice/mouse/button")==1){
 			f.setValue(r);
@@ -28,7 +32,54 @@ var forkcontrol = func{
 	}else{
 		f.setValue(r);
 	}
-	settimer(forkcontrol, 0.05);
+	if(bs > 38){
+		setprop("/controls/gear/brake-front", bl);
+	}else{
+		setprop("/controls/gear/brake-front", 0);
+	}
+	
+	# shoulder view helper
+	var cv = getprop("sim/current-view/view-number") or 0;
+	var apos = getprop("/devices/status/keyboard/event/key") or 0;
+	var press = getprop("/devices/status/keyboard/event/pressed") or 0;
+	var du = getprop("/controls/Kawa-ZX10R/driver-up") or 0;
+	#helper turn shoulder to look back
+	if(cv == 0 and !du){
+		if(apos == 49 and press){
+			setprop("/sim/current-view/heading-offset-deg", 155);
+			setprop("/controls/Kawa-ZX10R/driver-looks-back",1);
+		}else if(apos == 50 and press){
+			setprop("/sim/current-view/heading-offset-deg", -155);
+			setprop("/controls/Kawa-ZX10R/driver-looks-back-right",1);
+		}else{
+			var hdgpos = 0;
+		    var posi = getprop("/controls/flight/aileron-manual") or 0;
+		  	if(posi > 0.0001 and getprop("/controls/hangoff") == 1){
+				hdgpos = 360 - 27*posi;
+		  		setprop("/sim/current-view/goal-heading-offset-deg", hdgpos);
+		  	}else if (posi < -0.0001 and getprop("/controls/hangoff") == 1){
+				hdgpos = 27*abs(posi);
+		  		setprop("/sim/current-view/goal-heading-offset-deg", hdgpos);
+			}else if (posi > 0 and posi < 0.0001 and getprop("/controls/hangoff") == 1){
+				setprop("/sim/current-view/goal-heading-offset-deg", 360);
+			}else{
+				setprop("/sim/current-view/goal-heading-offset-deg", 0);
+			}
+			setprop("/controls/Kawa-ZX10R/driver-looks-back",0);
+			setprop("/controls/Kawa-ZX10R/driver-looks-back-right",0);
+		}
+	}
+	
+	# distance calculator helper
+	if(getprop("/instrumentation/Kawa-ZX10R/speed-indicator/selection")){
+		setprop("/instrumentation/Kawa-ZX10R/distance-calculator/miles", getprop("/instrumentation/Kawa-ZX10R/distance-calculator/mzaehler")*0.621371192); # miles on bike
+		setprop("/instrumentation/Kawa-ZX10R/distance-calculator/dmiles", getprop("/instrumentation/Kawa-ZX10R/distance-calculator/dmzaehler")*0.621371192); # miles a day
+	}else{
+		setprop("/instrumentation/Kawa-ZX10R/distance-calculator/miles", getprop("/instrumentation/Kawa-ZX10R/distance-calculator/mzaehler")); # km on bike
+		setprop("/instrumentation/Kawa-ZX10R/distance-calculator/dmiles", getprop("/instrumentation/Kawa-ZX10R/distance-calculator/dmzaehler")); # km a day
+	}
+	
+	settimer(forkcontrol, 0);
 };
 
 forkcontrol();
@@ -52,30 +103,13 @@ setlistener("/devices/status/mice/mouse/button[2]", func (state){
 });
 
 
-setlistener("/surface-positions/left-aileron-pos-norm", func (position){
-
-	var omm = getprop("/controls/Kawa-ZX10R/old-mens-mode") or 0;
-    var position = position.getValue();
-	
-	if (omm){
-		setprop("/sim/current-view/y-offset-m", - abs(position*0.6) +1.35);
-		setprop("/sim/current-view/x-offset-m", position*3.0);
-	}else{
-	    var driverpos = getprop("/controls/Kawa-ZX10R/driver-up") or 0;
-		var lookup = getprop("/instrumentation/airspeed-indicator/indicated-speed-kt") or 0;
-		setprop("/sim/current-view/y-offset-m", - abs(position) + (driverpos/4) + 1.375 - lookup/1400);  	# up/down
-		setprop("/sim/current-view/x-offset-m", position*3.6);  							# left/right	
-	}
-
-});
-
 setlistener("/controls/flight/aileron", func (position){
     var position = position.getValue();
 	# helper for the steering
 	var ms = getprop("/devices/status/mice/mouse/mode") or 0;
 	if (ms == 1) {
 		if(getprop("/devices/status/mice/mouse/button")==1){
-			setprop("/controls/flight/aileron-manual",position*3.0);
+			setprop("/controls/flight/aileron-manual",position*3);
 		}else{
 			f.setValue(position*0.65);
 			setprop("/controls/flight/aileron-manual", position*0.75);
@@ -84,9 +118,62 @@ setlistener("/controls/flight/aileron", func (position){
 	}else{
 		var np = math.round(position*position*position*100);
 		np = np/100;
-		interpolate("/controls/flight/aileron-manual", np,0.08);
+		interpolate("/controls/flight/aileron-manual", np,0.1);
 	}
 });
+
+setlistener("/surface-positions/left-aileron-pos-norm", func{
+
+	var cvnr = getprop("sim/current-view/view-number") or 0;
+	var omm = getprop("/controls/Kawa-ZX10R/old-mens-mode") or 0;
+    var position = getprop("/controls/flight/aileron-manual") or 0;
+	if(position >= 0){
+		position = (position > 0.4) ? 0.4 : position;
+	}else{
+		position = (position < -0.4) ? -0.4 : position;
+	}
+	
+	var driverpos = getprop("/controls/Kawa-ZX10R/driver-up") or 0;
+	var driverview = 0.6*driverpos;
+	driverview = (driverview == 0) ? -0.1 : driverview;	
+	
+	if (omm){
+		if(cvnr == 0){
+			setprop("/sim/current-view/x-offset-m", math.sin(position*1.6)*(1.36+driverpos/5));
+			setprop("/sim/current-view/y-offset-m", math.cos(position*1.9)*(1.36+driverpos/4));
+			setprop("/sim/current-view/z-offset-m",driverview);	
+		} 
+	}else{
+		if(cvnr == 0){
+			var godown = getprop("/instrumentation/airspeed-indicator/indicated-speed-kt") or 0;
+			var lookup = getprop("/controls/gear/brake-right") or 0;
+			var onwork = getprop("/controls/hangoff") or 0;
+			if(godown > 10 and godown < hangoffspeed.getValue()){
+				var factor = (position <= 0)? -0.6 : 0.6;
+				factor = (abs(factor) > abs(position)) ? position : factor;
+				if(onwork == 0){
+					settimer(func{setprop("/controls/hangoff",1)},0.1);
+					interpolate("/sim/current-view/x-offset-m", math.sin(factor*1.8)*(1.34+driverpos/5),0.1);
+					interpolate("/sim/current-view/y-offset-m", math.cos(factor*2.1)*(1.36 - godown/1300 + lookup/12 + driverpos/4),0.1);
+				}else{
+					setprop("/sim/current-view/x-offset-m", math.sin(factor*1.8)*(1.34+driverpos/5));
+					setprop("/sim/current-view/y-offset-m", math.cos(factor*2.1)*(1.36 - godown/1300 + lookup/12 + driverpos/4));
+				}
+			}else{
+				if(onwork == 1){
+					interpolate("/sim/current-view/x-offset-m", math.sin(position*1.6)*(1.3+driverpos/5),0.1);
+					interpolate("/sim/current-view/y-offset-m", math.cos(position*1.9)*(1.36 - godown/1500 + lookup/12 + driverpos/4),0.1);
+					settimer(func{setprop("/controls/hangoff",0)},0.1);
+				}else{
+					setprop("/sim/current-view/x-offset-m", math.sin(position*1.6)*(1.3+driverpos/5));
+					setprop("/sim/current-view/y-offset-m", math.cos(position*1.9)*(1.36 - godown/1500 + lookup/12 + driverpos/4));
+				}
+			}
+			setprop("/sim/current-view/z-offset-m",driverview);	
+		}    
+	}
+});
+
 
 setlistener("/controls/flight/elevator", func (position){
     var position = position.getValue();
@@ -104,8 +191,8 @@ setlistener("/controls/flight/elevator", func (position){
 	# helper for throtte on throttle axis or elevator
 	var se = getprop("/controls/flight/select-throttle-input") or 0;
 	if (ms == 0 and se == 1 and position >= 0) setprop("/controls/flight/throttle-input", position);
-	if (ms == 1 and position >= 0) setprop("/controls/flight/throttle-input", position*4.0);
-});
+	if (ms == 1 and position >= 0) setprop("/controls/flight/throttle-input", position*4);
+},0,1);
 
 
 setlistener("/controls/engines/engine[0]/throttle", func (position){
@@ -114,8 +201,8 @@ setlistener("/controls/engines/engine[0]/throttle", func (position){
 	# helper for throtte on throttle axis or elevator
 	var ms = getprop("/devices/status/mice/mouse/mode") or 0;
 	var se = getprop("/controls/flight/select-throttle-input") or 0;
-	if (ms == 0 and se == 0 and position >= 0) setprop("/controls/flight/throttle-input", position);
-});
+	if (ms == 0 and se == 0 and position >= 0) setprop("/controls/flight/throttle-input", position*position);
+},0,1);
 
 #----- speed meter selection ------
 

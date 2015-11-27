@@ -297,6 +297,22 @@
         <property>sim/multiplay/generic/int[4]</property>
       </condition>
     </animation>
+	
+  	<model>
+  		<name>Driver_quick_glance_over_shoulder_right</name>
+  		<path>Aircraft/Kawa-ZX10R/Models/Driver/driver_special_r.xml</path>
+  	</model>
+
+    <animation>
+      <type>select</type>
+      <object-name>Driver_quick_glance_over_shoulder_right</object-name>
+      <condition>
+        <not>
+          <property>sim/multiplay/generic/int[3]</property>
+        </not>
+        <property>sim/multiplay/generic/int[5]</property>
+      </condition>
+    </animation>
  
   <!-- right left -->
   <animation>
@@ -307,6 +323,7 @@
       <object-name>TRANSPONDER</object-name>
       <object-name>Driver</object-name>
       <object-name>Driver_quick_glance_over_shoulder</object-name>
+      <object-name>Driver_quick_glance_over_shoulder_right</object-name>
       <object-name>carrd</object-name>
       <object-name>carrd01</object-name>
       <object-name>carrd03</object-name>
@@ -342,13 +359,91 @@
       <object-name>kawaw</object-name>
       <object-name>kawaw01</object-name>
       <object-name>starter</object-name> 
+      <condition>
+        <not>
+          <equals>
+          <property>sim/current-view/name</property>
+          <value type="string">Cockpit View</value>
+          </equals>
+        </not>
+      </condition>
+        <property>surface-positions/left-aileron-pos-norm</property>
+        <interpolation>
+  		  <entry><ind>-1.0 </ind><dep>    57 </dep></entry>
+          <entry><ind>-0.3 </ind><dep>    57 </dep></entry>
+          <entry><ind> 0 </ind><dep>     0 </dep></entry>
+          <entry><ind> 0.3 </ind><dep>   -57 </dep></entry>
+          <entry><ind> 1.0 </ind><dep>   -57 </dep></entry>
+        </interpolation>
+        <center>
+         <x-m> 0.0</x-m>
+         <y-m> 0.0</y-m>
+         <z-m>-0.175</z-m>
+        </center>
+        <axis>
+          <x>  1 </x>
+          <y>  0 </y>
+          <z>  0 </z>
+        </axis>
+      </animation>
+	
+  <animation>
+	  <type>rotate</type>
+      <object-name>RPM</object-name>
+      <object-name>SI</object-name>
+      <object-name>SL</object-name>
+      <object-name>TRANSPONDER</object-name>
+      <object-name>Driver</object-name>
+      <object-name>Driver_quick_glance_over_shoulder</object-name>
+      <object-name>Driver_quick_glance_over_shoulder_right</object-name>
+      <object-name>carrd</object-name>
+      <object-name>carrd01</object-name>
+      <object-name>carrd03</object-name>
+      <object-name>screws</object-name>
+      <object-name>carrd04</object-name>
+      <object-name>carrd05</object-name>
+      <object-name>carrd06</object-name>
+      <object-name>carrd07</object-name>
+      <object-name>kawacro</object-name>
+      <object-name>kawadi</object-name>
+      <object-name>kawae</object-name>
+      <object-name>kawae01</object-name>
+      <object-name>kawaex</object-name>
+      <object-name>kawaf</object-name>
+      <object-name>kawagb</object-name>
+      <object-name>kawagb.001</object-name>
+      <object-name>kawagls</object-name>
+      <object-name>kawagls03</object-name>
+      <object-name>kawaholder</object-name>
+      <object-name>kawalk01</object-name>
+      <object-name>kawam01</object-name>
+      <object-name>kawam2</object-name>
+      <object-name>kawam4</object-name>
+      <object-name>kawam5</object-name>
+      <object-name>kawam6</object-name>
+      <object-name>kawam7</object-name>
+      <object-name>kawam8</object-name>
+      <object-name>kawamu</object-name>
+      <object-name>kawap1</object-name>
+      <object-name>kawap2</object-name>
+      <object-name>kawapl3</object-name>
+      <object-name>kawar1</object-name>
+      <object-name>kawaw</object-name>
+      <object-name>kawaw01</object-name>
+      <object-name>starter</object-name> 
+      <condition>
+        <equals>
+          <property>sim/current-view/name</property>
+          <value type="string">Cockpit View</value>
+        </equals>
+      </condition> 
       <property>surface-positions/left-aileron-pos-norm</property>
       <interpolation>
-		<entry><ind>-1.0 </ind><dep>    130 </dep></entry>
-        <entry><ind>-0.8 </ind><dep>    130 </dep></entry>
+		<entry><ind>-1.0 </ind><dep>    42 </dep></entry>
+        <entry><ind>-0.2 </ind><dep>    42 </dep></entry>
         <entry><ind> 0 </ind><dep>     0 </dep></entry>
-        <entry><ind> 0.8 </ind><dep>   -130 </dep></entry>
-        <entry><ind> 1.0 </ind><dep>   -130 </dep></entry>
+        <entry><ind> 0.2 </ind><dep>   -42 </dep></entry>
+        <entry><ind> 1.0 </ind><dep>   -42 </dep></entry>
       </interpolation>
       <center>
        <x-m> 0.0</x-m>

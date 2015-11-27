@@ -42,6 +42,17 @@
 		<object-name>digit-100</object-name>
 		<object-name>digit-gear</object-name>
 		<object-name>select</object-name>
+		<object-name>d-hms</object-name>
+		<object-name>d-km</object-name>
+		<object-name>d-zkm</object-name>
+		<object-name>d-tkm</object-name>
+		<object-name>d-ztkm</object-name>
+		<object-name>d-hms.001</object-name>
+		<object-name>d-km.001</object-name>
+		<object-name>d-zkm.001</object-name>
+		<object-name>d-hkm.001</object-name>
+		<object-name>d-tkm.001</object-name>
+		<object-name>d-ztkm.001</object-name>
 	</animation>
 
 	<effect>
@@ -208,7 +219,191 @@
                <y>0</y>
                <z>0</z>
            </axis>
-       </animation>1
+       </animation>
+	   
+	   <!-- distance digits -->
+	   	 <animation>
+	   	    <type>textranslate</type>
+	   	    <object-name>d-hms</object-name>
+	   	    <property>instrumentation/Kawa-ZX10R/distance-calculator/miles</property>
+	   	    <factor>0.001</factor>
+	   	    <step>100</step>
+	   	    <bias>0.005</bias>
+	   	    <axis>
+	   	        <x>1</x>
+	   	        <y>0</y>
+	   	        <z>0</z>
+	   	    </axis>
+	   	</animation>
+		
+     	 <animation>
+     	    <type>textranslate</type>
+     	    <object-name>d-km</object-name>
+     	    <property>instrumentation/Kawa-ZX10R/distance-calculator/miles</property>
+     	    <factor>0.0001</factor>
+     	    <step>1000</step>
+     	    <bias>0.005</bias>
+     	    <axis>
+     	        <x>1</x>
+     	        <y>0</y>
+     	        <z>0</z>
+     	    </axis>
+     	</animation>
+	
+         <animation>
+             <type>textranslate</type>
+             <object-name>d-zkm</object-name>
+             <property>instrumentation/Kawa-ZX10R/distance-calculator/miles</property>
+             <factor>0.00001</factor>
+             <step>10000</step>
+             <bias>0.005</bias>
+             <axis>
+                 <x>1</x>
+                 <y>0</y>
+                 <z>0</z>
+             </axis>
+         </animation>
+		 
+         <animation>
+             <type>textranslate</type>
+             <object-name>d-hkm</object-name>
+             <property>instrumentation/Kawa-ZX10R/distance-calculator/miles</property>
+             <factor>0.000001</factor>
+             <step>100000</step>
+             <bias>0.005</bias>
+             <axis>
+                 <x>1</x>
+                 <y>0</y>
+                 <z>0</z>
+             </axis>
+         </animation>
+	
+         <animation>
+             <type>textranslate</type>
+             <object-name>d-tkm</object-name>
+             <property>instrumentation/Kawa-ZX10R/distance-calculator/miles</property>
+             <factor>0.0000001</factor>
+             <step>1000000</step>
+             <bias>0.005</bias>
+             <axis>
+                 <x>1</x>
+                 <y>0</y>
+                 <z>0</z>
+             </axis>
+         </animation>
+	
+         <animation>
+             <type>textranslate</type>
+             <object-name>d-ztkm</object-name>
+             <property>instrumentation/Kawa-ZX10R/distance-calculator/miles</property>
+             <factor>0.00000001</factor>
+             <step>10000000</step>
+             <bias>0.005</bias>
+             <axis>
+                 <x>1</x>
+                 <y>0</y>
+                 <z>0</z>
+             </axis>
+         </animation>
+		 
+  	   <!-- day distance digits -->
+  	   	 <animation>
+  	   	    <type>textranslate</type>
+  	   	    <object-name>d-hms.001</object-name>
+  	   	    <property>instrumentation/Kawa-ZX10R/distance-calculator/dmiles</property>
+  	   	    <factor>0.001</factor>
+  	   	    <step>100</step>
+  	   	    <bias>0.005</bias>
+  	   	    <axis>
+  	   	        <x>1</x>
+  	   	        <y>0</y>
+  	   	        <z>0</z>
+  	   	    </axis>
+  	   	</animation>
+		
+       	 <animation>
+       	    <type>textranslate</type>
+       	    <object-name>d-km.001</object-name>
+       	    <property>instrumentation/Kawa-ZX10R/distance-calculator/dmiles</property>
+       	    <factor>0.0001</factor>
+       	    <step>1000</step>
+       	    <bias>0.005</bias>
+       	    <axis>
+       	        <x>1</x>
+       	        <y>0</y>
+       	        <z>0</z>
+       	    </axis>
+       	</animation>
+	
+           <animation>
+               <type>textranslate</type>
+               <object-name>d-zkm.001</object-name>
+               <property>instrumentation/Kawa-ZX10R/distance-calculator/dmiles</property>
+               <factor>0.00001</factor>
+               <step>10000</step>
+               <bias>0.005</bias>
+               <axis>
+                   <x>1</x>
+                   <y>0</y>
+                   <z>0</z>
+               </axis>
+           </animation>
+	
+           <animation>
+               <type>textranslate</type>
+               <object-name>d-hkm.001</object-name>
+               <property>instrumentation/Kawa-ZX10R/distance-calculator/dmiles</property>
+               <factor>0.000001</factor>
+               <step>100000</step>
+               <bias>0.005</bias>
+               <axis>
+                   <x>1</x>
+                   <y>0</y>
+                   <z>0</z>
+               </axis>
+           </animation>
+	
+           <animation>
+               <type>textranslate</type>
+               <object-name>d-tkm.001</object-name>
+               <property>instrumentation/Kawa-ZX10R/distance-calculator/dmiles</property>
+               <factor>0.0000001</factor>
+               <step>1000000</step>
+               <bias>0.005</bias>
+               <axis>
+                   <x>1</x>
+                   <y>0</y>
+                   <z>0</z>
+               </axis>
+           </animation>
+	
+           <animation>
+               <type>textranslate</type>
+               <object-name>d-ztkm.001</object-name>
+               <property>instrumentation/Kawa-ZX10R/distance-calculator/dmiles</property>
+               <factor>0.00000001</factor>
+               <step>10000000</step>
+               <bias>0.005</bias>
+               <axis>
+                   <x>1</x>
+                   <y>0</y>
+                   <z>0</z>
+               </axis>
+           </animation>
+	
+	       <animation>
+	           <type>pick</type>
+	           <object-name>srpmop.001</object-name>
+	   		<visible>false</visible>
+	           <action>
+	    	    <button>0</button>
+	               <binding>	    
+	   	    	  <command>property-assign</command>
+	   			  <property>instrumentation/Kawa-ZX10R/distance-calculator/dmzaehler</property>
+	   			  <value>0</value>	
+	               </binding>           
+	           </action>
+	       </animation>		
     
    <!-- selection -->
        <animation>
