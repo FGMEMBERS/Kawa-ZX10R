@@ -109,17 +109,20 @@ var loop = func {
 		# calculate the inertia
 		#inertia = (fuel_weight.getValue() + weight.getValue())/245; # 245 max. weight and fuel
 
- 		# overgspeed the engine
- 		if(rpm.getValue() > (maxrpm - 500)){
- 			killed.setValue(killed.getValue() + 1/maxhealth);
- 			if(killed.getValue() >= 1)rpm.setValue(40000);
- 		}
- 		if(killed.getValue() >= 1){
- 			running.setValue(0);
- 			killed.setValue(1);
- 			propulsion.setValue(0);
- 			engine_brake.setValue(0.7);
- 		}
+		# overgspeed the engine
+		if(rpm.getValue() > (maxrpm - 700)){
+			if(engine_rpm_regulation.getValue() < 1){
+				killed.setValue(killed.getValue() + 1/maxhealth);
+			}
+			if(killed.getValue() >= 1)rpm.setValue(40000);
+		}
+		if(killed.getValue() >= 1){
+			running.setValue(0);
+			killed.setValue(1);
+			propulsion.setValue(0);
+			interpolate("/engines/engine/rpm" , 0, 3);
+			engine_brake.setValue(0.7);
+		}
 
 		# max speed per gear in kts
 		if (gear.getValue() == 0) {
@@ -193,10 +196,13 @@ var loop = func {
 		}
 		
 		# Automatic RPM overspeed regulation
-		if(engine_rpm_regulation.getValue() == 1 and rpm.getValue() > maxrpm-1500){
+		if(engine_rpm_regulation.getValue() == 1 and rpm.getValue() > maxrpm-500){
 			propulsion.setValue(0);
 			if (speed > 20) engine_brake.setValue(0.8);
-			rpm.setValue(maxrpm-1000);
+			rpm.setValue(maxrpm-100);
+			setprop("/controls/Kawa-ZX10R/ctrl-light-overspeed", 1);
+		}else{
+			setprop("/controls/Kawa-ZX10R/ctrl-light-overspeed", 0);
 		}
 		
 		# Anti - slip regulation ASR

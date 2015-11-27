@@ -332,6 +332,7 @@ and have fun!</text>
    <clutch type="int">0</clutch>
    <killed type="float">0</killed>
    <brake-engine type="double">0.0</brake-engine>
+   <rpm_regulation type="int">0</rpm_regulation>
   </engine>
  </engines>
 
