@@ -174,9 +174,9 @@
 	<name>RPM</name>
     <path>Aircraft/Kawa-ZX10R/Models/Instruments/combi/combi.xml</path>
     <offsets>
-      <x-m> -0.67 </x-m>
-      <y-m> 0.0 </y-m>
-      <z-m> 0.97 </z-m>
+      <x-m> -0.683 </x-m>
+      <y-m> -0.002 </y-m>
+      <z-m> 0.945 </z-m>
       <pitch-deg> -35 </pitch-deg>
     </offsets>
   </model>
