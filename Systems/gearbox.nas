@@ -129,22 +129,22 @@ var loop = func {
 			vmax = 0;
 			fastcircuit.setValue(0);
 		} else if (gear.getValue() == 1) {
-			vmax = 50;
+			vmax = 70;
 			fastcircuit.setValue(0.1);
 		} else if (gear.getValue() == 2) {
-			vmax =  70;
+			vmax =  90;
 			fastcircuit.setValue(0.2);
 		} else if (gear.getValue() == 3) {
-			vmax = 100;
+			vmax = 120;
 			fastcircuit.setValue(0.3);
 		} else if (gear.getValue() == 4) {
-			vmax = 130;
+			vmax = 150;
 			fastcircuit.setValue(0.4);
 		} else if (gear.getValue() == 5) {
-			vmax = 165;
+			vmax = 180;
 			fastcircuit.setValue(0.5);
 		} else if (gear.getValue() == 6) {
-			vmax = 193;
+			vmax = 210;
 			fastcircuit.setValue(0.6);
 		}
 
@@ -217,12 +217,13 @@ var loop = func {
 
 	   	 if(rpm.getValue() < minrpm) rpm.setValue(minrpm);  # place after the rpm calculation
 	 
-	   	 if (fuel.getValue() < 0.0000015) {
+	   	 if (fuel.getValue() < 0.000002) {
 	   	  running.setValue(0);
 	   	  }
 	   	 else {
 	   	  fuel_lev = fuel.getValue();
-	   	  fuel.setValue(fuel_lev - (0.5*throttle.getValue()+0.3)*0.0000015);  # +0.1 consumption on idle rpm
+		  setprop("/controls/fuel/remember-level", fuel.getValue()); # save it for restart
+	   	  fuel.setValue(fuel_lev - (throttle.getValue()+0.1)*0.00000145);
 	   	 }
 		 
 		 #-------------- ENGINE RUNNING END --------------------
