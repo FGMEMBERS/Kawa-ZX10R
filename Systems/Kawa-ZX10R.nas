@@ -110,7 +110,6 @@ setlistener("/devices/status/mice/mouse/button[2]", func (state){
 	}
 });
 
-
 setlistener("/controls/flight/aileron", func (position){
     var position = position.getValue();
 	# helper for the steering
@@ -124,9 +123,16 @@ setlistener("/controls/flight/aileron", func (position){
 		}
 		
 	}else{
-		var np = math.round(position*position*position*100);
-		np = np/100;
-		interpolate("/controls/flight/aileron-manual", np,0.1);
+		var joyst = getprop("/input/joysticks/js/id") or '';
+		if(joyst == 'Arduino Leonardo'){
+			var np = math.round(position*100);
+			np = np/100;
+			interpolate("/controls/flight/aileron-manual", np,0.1);
+		}else{
+			var np = math.round(position*position*position*100);
+			np = np/100;
+			interpolate("/controls/flight/aileron-manual", np,0.1);
+		}
 	}
 });
 
