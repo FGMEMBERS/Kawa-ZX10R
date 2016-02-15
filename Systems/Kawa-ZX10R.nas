@@ -61,17 +61,27 @@ var forkcontrol = func{
 			setprop("/controls/Kawa-ZX10R/driver-looks-back-right",1);
 		}else{
 			var hdgpos = 0;
-		    var posi = getprop("/controls/flight/aileron-manual") or 0;
+		    var posi = getprop("/controls/flight/aileron-manual") or 0;			
+			var sceneryposi = posi*45;
+			if(sceneryposi > 0){
+				sceneryposi = (sceneryposi > 18) ? 18 : sceneryposi;
+			}else{
+				sceneryposi = (sceneryposi < -18) ? -18 : sceneryposi;
+			}
 		  	if(posi > 0.0001 and getprop("/controls/hangoff") == 1){
 				hdgpos = 360 - 27*posi;
 		  		setprop("/sim/current-view/goal-heading-offset-deg", hdgpos);
+				setprop("/sim/current-view/goal-roll-offset-deg", sceneryposi);
 		  	}else if (posi < -0.0001 and getprop("/controls/hangoff") == 1){
 				hdgpos = 27*abs(posi);
 		  		setprop("/sim/current-view/goal-heading-offset-deg", hdgpos);
+				setprop("/sim/current-view/goal-roll-offset-deg", sceneryposi);
 			}else if (posi > 0 and posi < 0.0001 and getprop("/controls/hangoff") == 1){
 				setprop("/sim/current-view/goal-heading-offset-deg", 360);
+				setprop("/sim/current-view/goal-roll-offset-deg", 0);
 			}else{
 				setprop("/sim/current-view/goal-heading-offset-deg", 0);
+				setprop("/sim/current-view/goal-roll-offset-deg", 0);
 			}
 			setprop("/controls/Kawa-ZX10R/driver-looks-back",0);
 			setprop("/controls/Kawa-ZX10R/driver-looks-back-right",0);
