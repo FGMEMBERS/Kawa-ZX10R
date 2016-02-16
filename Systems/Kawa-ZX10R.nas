@@ -234,7 +234,7 @@ setlistener("/instrumentation/airspeed-indicator/indicated-speed-kt", func (spee
 	var groundspeed = getprop("/velocities/groundspeed-kt") or 0;
     var speed = speed.getValue();
     # only for manipulate the reset m function 
-	if (speed > 10) setprop("/controls/waiting", 1);
+	if (groundspeed > 30) setprop("/controls/waiting", 1);
 	if(getprop("/instrumentation/Kawa-ZX10R/speed-indicator/selection")){
 		if(groundspeed > 0.1){
 			setprop("/instrumentation/Kawa-ZX10R/speed-indicator/speed-meter", speed*1.15077945); # mph
@@ -367,7 +367,7 @@ setlistener("sim/model/start-idling", func()
 			help_win_red.write("Is everything ok with you?");
 		}else{
 			help_win_red.write("5 SECONDS WAITING FOR REPLACEMENT!");
-			settimer(func{setprop("/controls/waiting", 0)}, 3);
+			settimer(func{setprop("/controls/waiting", 0)}, 1);
 		}
    }
   }, 1, 1);
